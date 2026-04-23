@@ -25,7 +25,7 @@ connectDB();
 app.use(
   cors({
     origin: "http://localhost:5173", // frontend URL (change if needed)
-    credentials: true, // 🔥 REQUIRED for cookies
+    credentials: true, // REQUIRED for cookies
   })
 );
 
@@ -76,5 +76,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🔥 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 export default function SignupPage() {
+  const navigate = useNavigate();
+
+
   const [role, setRole] = useState("vendor");
 
   const [formData, setFormData] = useState({
@@ -13,18 +15,63 @@ export default function SignupPage() {
     phone: "",
   });
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    console.log("Role:", role);
-    console.log("Data:", formData);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role,
+          phone: formData.phone,
+          ...(role === "vendor" && { category: formData.category }),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.msg || "Signup failed ❌");
+        return;
+      }
+
+      alert("Signup Successful ✅ Please login");
+
+      // ✅ RESET FORM
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        category: "",
+        phone: "",
+      });
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+
+    } catch (err) {
+      console.log(err);
+      alert("Server error ❌");
+    }
   };
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
 
   const inputClass =
     "w-full px-4 py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400";
@@ -46,11 +93,10 @@ export default function SignupPage() {
             <button
               key={item}
               onClick={() => setRole(item)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg capitalize text-sm sm:text-base transition ${
-                role === item
-                  ? "bg-blue-600 text-white shadow-md scale-105"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg capitalize text-sm sm:text-base transition ${role === item
+                ? "bg-blue-600 text-white shadow-md scale-105"
+                : "bg-gray-200 hover:bg-gray-300"
+                }`}
             >
               {item}
             </button>
