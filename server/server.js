@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
-
+import userRoutes from "./routes/userRoute.js";
 // ROUTES
 import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -11,7 +11,6 @@ import cartRoutes from "./routes/cartRoute.js";
 import orderRoutes from "./routes/orderRoute.js";
 import adminRoutes from "./routes/adminRoute.js";
 import vendorRoutes from "./routes/venderRoute.js";
-
 dotenv.config();
 
 const app = express();
@@ -19,26 +18,28 @@ const app = express();
 // 🔗 CONNECT DATABASE
 connectDB();
 
-// 🧩 MIDDLEWARE
-
-// ✅ CORS FIX (IMPORTANT for cookies)
+// ✅ CORS FIX
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend URL (change if needed)
-    credentials: true, // REQUIRED for cookies
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 
-// ✅ PARSE JSON
+// ✅ PARSE JSON / FORM DATA
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ✅ COOKIE PARSER (for reading cookies)
+// ✅ COOKIE PARSER
 app.use(cookieParser());
 
 // 🌐 ROOT CHECK
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
+
+
+app.use("/api/user", userRoutes);
 
 // 🔐 AUTH
 app.use("/api/auth", authRoutes);
@@ -76,5 +77,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🔥 Server running on port ${PORT}`);
 });

@@ -92,7 +92,10 @@ export default function SignupPage() {
           {["admin", "vendor", "user"].map((item) => (
             <button
               key={item}
-              onClick={() => setRole(item)}
+              onClick={() => {
+                console.log("Selected role:", item);
+                setRole(item);
+              }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg capitalize text-sm sm:text-base transition ${role === item
                 ? "bg-blue-600 text-white shadow-md scale-105"
                 : "bg-gray-200 hover:bg-gray-300"

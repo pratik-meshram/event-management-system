@@ -17,55 +17,61 @@ export default function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   // LOGIN
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          role,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.msg || "Login failed ❌");
-        return;
-      }
-
-      alert("Login Successful ✅");
-
-      // ✅ SAVE USER (IMPORTANT)
-      localStorage.setItem("user", JSON.stringify({
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
         email: formData.email,
-        role: role
-      }));
+        password: formData.password,
+        role,
+      }),
+    });
 
-      // ✅ RESET FORM
-      setFormData({ email: "", password: "" });
+    const data = await res.json();
 
-      // ✅ REDIRECT
-      if (role === "admin") {
-        navigate("/admin");
-      } else if (role === "vendor") {
-        navigate("/vendor");
-      } else {
-        navigate("/user");
-      }
-
-    } catch (err) {
-      console.log(err);
-      alert("Server error ❌");
+    if (!res.ok) {
+      alert(data.msg || "Login failed ❌");
+      return;
     }
-  };
+
+    alert("Login Successful ✅");
+    console.log(data); // ✅ correct
+
+    // ✅ SAVE USER
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        email: formData.email,
+        role: role,
+      })
+    );
+
+    // ✅ SAVE TOKEN (FIXED)
+    localStorage.setItem("token", data.token);
+
+    // ✅ RESET FORM
+    setFormData({ email: "", password: "" });
+
+    // ✅ REDIRECT
+    if (role === "admin") {
+      navigate("/admin");
+    } else if (role === "vendor") {
+      navigate("/vendor");
+    } else {
+      navigate("/user");
+    }
+  } catch (err) {
+    console.log(err);
+    alert("Server error ❌");
+  }
+};
 
   const handleReset = () => setFormData({ email: "", password: "" });
 

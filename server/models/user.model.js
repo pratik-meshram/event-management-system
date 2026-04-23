@@ -27,9 +27,7 @@ const userSchema = new mongoose.Schema(
     // Phone (only for user & vendor)
     phone: {
       type: String,
-      required: function () {
-        return this.role === "vendor" || this.role === "user";
-      },
+      required: false,
     },
 
     //  Vendor category
