@@ -1,4 +1,9 @@
+# ======================
+
 # Logs
+
+# ======================
+
 logs
 *.log
 npm-debug.log*
@@ -7,27 +12,96 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
-node_modules/
+# ======================
 
-# Build files
+# Dependency directories
+
+# ======================
+
+node_modules/
+.pnpm-store/
+
+# ======================
+
+# Build output
+
+# ======================
+
 dist/
 dist-ssr/
 build/
+coverage/
 
-# Env files
+# ======================
+
+# Environment files
+
+# ======================
+
 .env
 .env.*
+!.env.example
+
+# ======================
+
+# Local config
+
+# ======================
+
 *.local
 
-# Editor / IDE
+# ======================
+
+# Editor & IDE files
+
+# ======================
+
 .vscode/*
 !.vscode/extensions.json
 .idea/
-
-# OS files
 .DS_Store
 Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Misc
-coverage/
+# ======================
+
+# Vite specific
+
+# ======================
+
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# ======================
+
+# Cache
+
+# ======================
+
+.cache/
+.temp/
+.eslintcache
+
+# ======================
+
+# OS files
+
+# ======================
+
+Desktop.ini
+
+# ======================
+
+# Optional: lock files (team preference)
+
+# ======================
+
+# package-lock.json
+
+# yarn.lock
+
+# pnpm-lock.yaml
